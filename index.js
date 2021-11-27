@@ -15,7 +15,7 @@ str= 0.4
 // Define a drawing function
 drawRect = (boxes, classes, scores, imgWidth, imgHeight, ctx) => {
     for (let i = 0; i <= boxes.length; i++) {
-        if (classes[i] === 1 && boxes[i] && scores[i] > 0.1) {
+        if (classes[i] === 1 && boxes[i] && scores[i] > 0.4) {
             const [y, x, height, width] = boxes[i]
             const text = classes[i]
             console.log(labelMap[text]['name'] + ' - ' + Math.round(scores[i] * 100) / 100,);
@@ -41,12 +41,12 @@ window.onload = async function () {
         video: true
     }).then(async (stream) => {
         videoElem.srcObject = stream;
-        const MODEL_URL = './model/model.json';
+        const MODEL_URL = './models/model.json';
         let model;
         model = await tf.loadGraphModel(MODEL_URL);
         detection = setInterval(async () => {
             await detect(model);
-        }, 500);
+        }, 100);
 
     }).catch((err) => {
         alert(err);
@@ -78,9 +78,8 @@ const detect = async (net) => {
 
     //final3
     const boxes = await obj[4].array(); //
-    const classes = await obj[1].array(); //
-    const scores = await obj[5].array();
-    // console.log(await obj[6].array());
+    const classes = await obj[3].array(); //
+    const scores = await obj[2].array();
     // Draw mesh
     const ctx = canvasRef.getContext("2d");
 
